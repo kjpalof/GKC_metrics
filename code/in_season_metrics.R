@@ -66,3 +66,7 @@ cpue_week2 %>% left_join(week2_allyears) -> cpue_week2
 ggplot(cpue_week2, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
 ggplot(cpue_week2, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area) +
   geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("First two weeks of fishery")
+
+
+# Other ideas:
+# lbs/boat/day
