@@ -50,3 +50,19 @@ cpue_data %>% left_join(All_mean_allyears) -> cpue_data1
 ggplot(cpue_data1, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
 ggplot(cpue_data1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area) +
   geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("Entire season")
+
+
+#CPUE by year, Area for first two weeks ----------------------------
+weeks2 <- c(41:63)
+data %>% filter(dayofyear %in% weeks2) ->weeks2data
+head(weeks2data)
+weeks2data %>% filter(!is.na(cpue)) %>% group_by(Area, year) %>% 
+  summarise(meanC = mean(cpue)) ->cpue_week2
+
+cpue_week2 %>% group_by(Area) %>% summarise(CPUE_allyears = mean(meanC)) %>% 
+  mutate(mean20 = CPUE_allyears*.20) -> week2_allyears
+cpue_week2 %>% left_join(week2_allyears) -> cpue_week2
+
+ggplot(cpue_week2, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
+ggplot(cpue_week2, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area) +
+  geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("First two weeks of fishery")
