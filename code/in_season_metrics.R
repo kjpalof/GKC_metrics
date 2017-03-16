@@ -35,9 +35,13 @@ cpue_month1 %>% group_by(Area) %>% summarise(CPUE_allyears = mean(meanC)) %>%
 cpue_month1 %>% left_join(mean_allyears) -> cpue_month1
 
 ggplot(cpue_month1, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
-ggplot(cpue_month1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area) +
+ggplot(cpue_month1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area, scales = "free_y") +
   geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("First month of fishery")
-
+month1data %>% 
+  group_by(year,Area_code) %>% 
+  ggplot(aes(year,cpue))+
+stat_summary(fun.data = mean_cl_boot, geom = "smooth") + facet_wrap(~Area) +
+stat_summary(fun.y = mean, geom = "point")
 
 # CPUE by year/ Area for all data ------------------------------------
 data %>% filter(!is.na(cpue)) %>% filter(Area != "") %>% group_by(Area, year) %>% 
