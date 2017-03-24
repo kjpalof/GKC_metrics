@@ -52,7 +52,7 @@ cpue_data %>% group_by(Area) %>% summarise(CPUE_allyears = mean(meanC)) %>%
 cpue_data %>% left_join(All_mean_allyears) -> cpue_data1
 
 ggplot(cpue_data1, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
-ggplot(cpue_data1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area) +
+ggplot(cpue_data1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area, scales = "free_y") +
   geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("Entire season")
 
 
