@@ -40,10 +40,13 @@ data2 %>% group_by(year, Area, fishery_day) %>%
 # figures for fishery day and CPUE
 day_CPUE_sum %>% 
   filter(fishery_day <7) %>% 
-  ggplot(aes(fishery_day, cpue_m)) +geom_point() +facet_wrap(~Area, scales = "free_y")
+  ggplot(aes(fishery_day, cpue_m, colour = year)) +geom_point() +facet_wrap(~Area, scales = "free_y")
 
 
 day_CPUE_sum %>% 
+  
+  
+
   filter(fishery_day < 14) %>% 
   ggplot(aes(year,cpue_m))+
   stat_summary(fun.data = mean_cl_boot, geom = "smooth") + facet_wrap(~Area) +
