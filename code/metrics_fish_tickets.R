@@ -9,6 +9,7 @@ library(tidyverse)
 library(reshape2)
 library(scales)
 library(gridExtra)
+library(broom)
 options(scipen=9999) # remove scientific notation
 theme_set(theme_bw()+ 
             theme(panel.grid.major = element_blank(),
@@ -37,4 +38,32 @@ season %>% mutate(start = as.Date(start_date, format = '%m/%d/%Y'), end = as.Dat
 # merge data and season_dates
 fshtkt00 %>% left_join(season_dates) -> fshtkt00_d
 
-fshtk00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
+fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
+
+## East Central
+fshtkt00_d %>% filter (Area == "East Central GKC") %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
+  group_by(year, Area, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->eastC
+
+## cumulative pounds by fishery day by year
+eastC %>% mutate(cumu = cumsum(pounds)) %>% filter(fishery_day < 20) %>% filter(year > 2008) -> eastC_1
+eastC_1%>% 
+  ggplot(aes(fishery_day, cumu, colour = year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  scale_color_gradient(low = "blue", high ="red")
+
+# regression for first 20 days
+eastC_1 %>% # 
+  group_by(year) %>%
+  do(fit = lm(cumu ~ fishery_day, data =.)) -> step1
+
+step1 %>%
+  tidy(fit) -> step1_slope
+
+short_term %>%
+  glance(fit) ->short_term_out
+
+## Graph of fishery day by pounds
+fshtkt00_d %>% 
+    filter (Area == "East Central GKC") %>% 
+    ggplot(aes(fishery_day, POUNDS)) +geom_point() +facet_wrap(~year)
+
+
