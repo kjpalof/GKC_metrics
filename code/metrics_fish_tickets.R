@@ -58,8 +58,12 @@ eastC_1 %>% #
 step1 %>%
   tidy(fit) -> step1_slope
 
-short_term %>%
-  glance(fit) ->short_term_out
+step1 %>%
+  glance(fit) ->step1_out
+
+# need to summarise these for each year - need slope, p-value, ? R -squared
+
+
 
 ## Graph of fishery day by pounds
 fshtkt00_d %>% 
