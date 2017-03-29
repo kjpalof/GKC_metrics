@@ -50,7 +50,7 @@ eastC_1%>%
   ggplot(aes(fishery_day, cumu, colour = year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
   scale_color_gradient(low = "blue", high ="red")
 
-# regression for first 20 days
+# regression for first 20 days - by year
 eastC_1 %>% # 
   group_by(year) %>%
   do(fit = lm(cumu ~ fishery_day, data =.)) -> step1
@@ -61,8 +61,18 @@ step1 %>%
 step1 %>%
   glance(fit) ->step1_out
 
-# need to summarise these for each year - need slope, p-value, ? R -squared
+step1_out %>% 
+  select(year, r.squared, p.value) -> step1_out2
 
+step1_slope %>% filter(term == 'fishery_day') %>% 
+  select(year, estimate, std.error) %>% 
+  right_join(step1_out2) -> step1_end  # estimate here is slope from regression
+
+
+
+# need to summarise these for each year - need slope, p-value, ? R -squared
+# Regression for first 20 days with year as variable
+fit2 = lm(cumu ~ fishery_day + year, data =eastC_1)
 
 
 ## Graph of fishery day by pounds
