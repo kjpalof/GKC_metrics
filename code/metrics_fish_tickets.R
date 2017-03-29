@@ -40,15 +40,49 @@ fshtkt00 %>% left_join(season_dates) -> fshtkt00_d
 
 fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
 
-## East Central
+## total harvest by year
+fshtkt %>% group_by(year) %>% summarise(harvest = sum(POUNDS), effort = sum(POTS)) ->harvest_all
+ggplot(harvest_all, aes(year, harvest)) +geom_point()
+
+### All Southeast -------------------------
+fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
+  group_by(year, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->allSE
+
+allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
+  filter(fishery_day < 20) %>% filter(year > 2008) -> allSE_09
+allSE_09%>% 
+  ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("All Southeast cumulative harvest")+ylab("Cumulative Harvest, lbs")
+
+# regression for first 20 days - by year - for ALL SOUTHEAST
+allSE_09 %>% # 
+  group_by(year) %>%
+  do(fit = lm(cumu ~ fishery_day, data =.)) -> one
+
+one %>%
+  tidy(fit) -> slope_SE
+
+one %>%
+  glance(fit) ->out_SE
+
+out_SE %>% 
+  select(year, r.squared, p.value) -> out_SE_1
+
+slope_SE %>% filter(term == 'fishery_day') %>% 
+  select(year, estimate, std.error) %>% 
+  right_join(out_SE_1) -> SE_end  # estimate here is slope from regression
+
+## East Central---------------------------
 fshtkt00_d %>% filter (Area == "East Central GKC") %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
   group_by(year, Area, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->eastC
 
 ## cumulative pounds by fishery day by year
-eastC %>% mutate(cumu = cumsum(pounds)) %>% filter(fishery_day < 20) %>% filter(year > 2008) -> eastC_1
+eastC %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% filter(fishery_day < 20) %>% filter(year > 2008) -> eastC_1
 eastC_1%>% 
-  ggplot(aes(fishery_day, cumu, colour = year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
-  scale_color_gradient(low = "blue", high ="red")
+  ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("East Central cumulative harvest")+ylab("Cumulative Harvest, lbs")
+  
+#scale_color_gradient(low = "blue", high ="red")
 
 # regression for first 20 days - by year
 eastC_1 %>% # 
@@ -68,14 +102,19 @@ step1_slope %>% filter(term == 'fishery_day') %>%
   select(year, estimate, std.error) %>% 
   right_join(step1_out2) -> step1_end  # estimate here is slope from regression
 
-
-
 # need to summarise these for each year - need slope, p-value, ? R -squared
 # Regression for first 20 days with year as variable
-fit2 = lm(cumu ~ fishery_day + year, data =eastC_1)
+fit2 = aov(cumu ~ fishery_day + year, data =eastC_1)
+fit3 = aov(cumu ~ fishery_day*year, data = eastC_1)
+
+anova(fit2, fit3) # interaction between fishery_day and year IS SIGNIFICANT
 
 
-## Graph of fishery day by pounds
+
+
+
+
+## Graph of fishery day by pounds - THIS IS NOT cumulative pounds - not useful right now
 fshtkt00_d %>% 
     filter (Area == "East Central GKC") %>% 
     ggplot(aes(fishery_day, POUNDS)) +geom_point() +facet_wrap(~year)
