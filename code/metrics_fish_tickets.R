@@ -49,7 +49,8 @@ ggsave("./figures/regional_harvest.png")
 fshtkt %>% filter(!is.na(POUNDS), !is.na(POTS), Area != "") %>% group_by(Area, year) %>% 
   summarise(harvest = sum(POUNDS)) ->harvest_area
 ggplot(harvest_area, aes(year, harvest, fill = Area))+geom_bar(stat = "identity") +
-  scale_fill_brewer( palette = "Paired")
+  scale_fill_brewer( palette = "Paired") + ggtitle("Harvest by area") +ylab("Harvest, lbs")
+ggsave("./figures/regional_harvest_byarea.png", width = 6.44, height = 4.77)
 
 # didn't need this to make graph ------------
 spread(harvest_area, Area, harvest) -> harvest_area1
