@@ -42,7 +42,20 @@ fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
 
 ## total harvest by year -------------
 fshtkt %>% filter(!is.na(POUNDS))%>% group_by(year) %>% summarise(harvest = sum(POUNDS), effort = sum(POTS)) ->harvest_all
-ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")
+ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")+ylab("Harvest, lbs")+ggtitle("Southeast Harvest")
+ggsave("./figures/regional_harvest.png")
+# width = 4, height = 2.5, units = "in"
+# total harvest by area and year
+fshtkt %>% filter(!is.na(POUNDS), !is.na(POTS), Area != "") %>% group_by(Area, year) %>% 
+  summarise(harvest = sum(POUNDS)) ->harvest_area
+ggplot(harvest_area, aes(year, harvest, fill = Area))+geom_bar(stat = "identity") +
+  scale_fill_brewer( palette = "Paired")
+
+# didn't need this to make graph ------------
+spread(harvest_area, Area, harvest) -> harvest_area1
+harvest_area1 %>% select(-`Misc. Golden King Crab`) %>% replace(is.na(.), 0) %>% 
+  mutate(total = rowSums(.[2:7]))-> harvest_area2
+#----------------
 
 #bar graph with contribution by management area
 
