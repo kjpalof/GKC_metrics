@@ -40,9 +40,11 @@ fshtkt00 %>% left_join(season_dates) -> fshtkt00_d
 
 fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
 
-## total harvest by year
+## total harvest by year -------------
 fshtkt %>% filter(!is.na(POUNDS))%>% group_by(year) %>% summarise(harvest = sum(POUNDS), effort = sum(POTS)) ->harvest_all
 ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")
+
+#bar graph with contribution by management area
 
 ### All Southeast -------------------------
 fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
