@@ -58,7 +58,41 @@ harvest_area1 %>% select(-`Misc. Golden King Crab`) %>% replace(is.na(.), 0) %>%
   mutate(total = rowSums(.[2:7]))-> harvest_area2
 #----------------
 
-#bar graph with contribution by management area
+### Attempt to calculate pounds per day per boat - All of southeast 
+fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% 
+  group_by(year, fishery_day) %>% summarise( pounds = sum(POUNDS), boats = n_distinct(ADFG_NO))-> pounds_day
+
+pounds_day %>% mutate(lb_perboat = pounds/boats) ->pounds_day
+pounds_day %>% group_by(year) %>% summarise (meanlb = mean(lb_perboat)) -> lb_boat_day1
+
+ggplot(lb_boat_day1, aes(year, meanlb))+geom_point()
+
+## By Area 
+fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% 
+  group_by(Area, year, fishery_day) %>% summarise( pounds = sum(POUNDS), boats = n_distinct(ADFG_NO)) %>% 
+  mutate(lb_perboat = pounds/boats) -> pounds_dayA
+pounds_dayA %>% group_by(Area, year) %>% summarise (meanlb = mean(lb_perboat)) -> lb_boat_day1A
+
+ggplot(lb_boat_day1A, aes(year, meanlb))+geom_line() + facet_wrap(~Area, scales = "free_y")+
+  ggtitle("Pounds per boat per day average over season")
+
+
+### pounds per boat day - Adam's method
+fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% mutate(lengthS = end_day - start_day) %>% 
+  group_by(year) %>% summarise(pounds = sum(POUNDS), boats = n_distinct(ADFG_NO), maxS = max(lengthS)) %>% 
+  mutate(lb_perboatday = (pounds/boats)/maxS) -> lb_boat_day2
+ggplot(lb_boat_day2, aes(year, lb_perboatday))+geom_point()
+
+## By Area
+fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% mutate(lengthS = end_day - start_day) %>% 
+  group_by(Area, year) %>% summarise(pounds = sum(POUNDS), boats = n_distinct((ADFG_NO)), 
+                                     lengthS = max(lengthS)) %>% 
+  mutate(lb_perboat = pounds/boats/lengthS) -> lb_boat_day2B
+ggplot(lb_boat_day2B, aes(year, lb_perboat))+ geom_point() + geom_line() +facet_wrap(~Area, scales = "free_y")+
+  ggtitle("Pounds per boat per day for the entire season")
+
+# look at 2010 east central data
+fshtkt00_d %>% filter (Area == "East Central GKC", year == 2010) ->exam1
 
 ### All Southeast -------------------------
 fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
