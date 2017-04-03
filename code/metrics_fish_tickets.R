@@ -10,10 +10,12 @@ library(reshape2)
 library(scales)
 library(gridExtra)
 library(broom)
+library(extrafont)
 options(scipen=9999) # remove scientific notation
-theme_set(theme_bw()+ 
-            theme(panel.grid.major = element_blank(),
-                  panel.grid.minor = element_blank()))
+loadfonts(device="win")
+windowsFonts(Times=windowsFont("TT Times New Roman"))
+theme_set(theme_bw(base_size=12,base_family='Times New Roman')
+          +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()))
 
 ## Load data -------------------------------------------------------
 fshtct <- read.csv("./data/gkc_fishticket_all_17.csv")
