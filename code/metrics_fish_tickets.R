@@ -11,6 +11,7 @@ library(scales)
 library(gridExtra)
 library(broom)
 library(extrafont)
+library(grid)
 options(scipen=9999) # remove scientific notation
 loadfonts(device="win")
 windowsFonts(Times=windowsFont("TT Times New Roman"))
@@ -44,15 +45,26 @@ fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
 
 ## total harvest by year -------------
 fshtkt %>% filter(!is.na(POUNDS))%>% group_by(year) %>% summarise(harvest = sum(POUNDS), effort = sum(POTS)) ->harvest_all
-ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")+ylab("Harvest, lbs")+ggtitle("Southeast Harvest")
-ggsave("./figures/regional_harvest.png")
+ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")+ylab("Harvest, lbs")+
+  ggtitle("Southeast Harvest")
+ggsave("./figures/regional_harvest.png", width = 4.44, height = 2.77)
 # width = 4, height = 2.5, units = "in"
 # total harvest by area and year
 fshtkt %>% filter(!is.na(POUNDS), !is.na(POTS), Area != "") %>% group_by(Area, year) %>% 
   summarise(harvest = sum(POUNDS)) ->harvest_area
-ggplot(harvest_area, aes(year, harvest, fill = Area))+geom_bar(stat = "identity") +
+reg_har_area <-ggplot(harvest_area, aes(year, harvest, fill = Area))+geom_bar(stat = "identity") +
   scale_fill_brewer( palette = "Paired") + ggtitle("Harvest by area") +ylab("Harvest, lbs")
-ggsave("./figures/regional_harvest_byarea.png", width = 6.44, height = 4.77)
+#ggsave("./figures/regional_harvest_byarea.png")
+# save manuually 800 by 500 
+png(file='./figures/regional_harvest_area.png', res=200, width=8, height=6, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(reg_har_area,vp=vplayout(1,1:1))
+dev.off()
+
+
+
 
 # didn't need this to make graph ------------
 spread(harvest_area, Area, harvest) -> harvest_area1
@@ -76,7 +88,7 @@ fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>%
 pounds_dayA %>% group_by(Area, year) %>% summarise (meanlb = mean(lb_perboat)) -> lb_boat_day1A
 
 ggplot(lb_boat_day1A, aes(year, meanlb))+geom_line() + facet_wrap(~Area, scales = "free_y")+
-  ggtitle("Pounds per boat per day average over season")
+  ggtitle("Average pounds per boat per day over season")
 
 
 ### pounds per boat day - Adam's method
@@ -101,12 +113,12 @@ fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
   group_by(year, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->allSE
 
 allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
-  filter(fishery_day < 20) %>% filter(year > 2008) -> allSE_09
+  filter(fishery_day < 22) %>% filter(year > 2008) -> allSE_09
 allSE_09%>% 
   ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
   ggtitle("All Southeast cumulative harvest")+ylab("Cumulative Harvest, lbs")
 
-# regression for first 20 days - by year - for ALL SOUTHEAST
+# regression for first 21 days - by year - for ALL SOUTHEAST
 allSE_09 %>% # 
   group_by(year) %>%
   do(fit = lm(cumu ~ fishery_day, data =.)) -> one
