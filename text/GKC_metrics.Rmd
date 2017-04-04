@@ -1,0 +1,48 @@
+---
+title: "GKC metrics"
+author: "Katie Palof"
+date: "March 30, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(reshape2)
+library(scales)
+library(gridExtra)
+library(broom)
+options(scipen=9999) # remove scientific notation
+theme_set(theme_bw()+ 
+            theme(panel.grid.major = element_blank(),
+                  panel.grid.minor = element_blank()))
+knitr::opts_chunk$set(echo = FALSE, message=F, warning=F)
+```
+
+## Objective
+The objective of this data exploration was to explore in-season metrics that would be helpful in assessing the health of the GKC populations, both within each management area and regionally. 
+
+Fish ticket data was used for any analysis that involved reported harvest in lbs, since this is only available on fish tickets.  Logbook data was used for analysises that involved CPUE, since logbooks are the most accurate record of catch in numbers and effort (pots pulled). 
+
+## Southeast Regional GKC
+While the GKC fishery is managed by area, initial examinations of harvest were done using the entire region.  Recent regional harvest has declined the last six season (Figure 1), with the last three seasons (2014, 2015, 2016) being well below both the historic average 506,918 lb (1980-2016, blue line) and the recent average 453,564 lb (1997 - 2016, red line). 
+The fishery is managed seperately for each of seven management areas.  The majority of the harvest, historically, has come from East Central, Mid-Chatham, and Northern areas (Figure 2). 
+
+####Figure 1: Regional harvest over time 
+![](../figures/regional_harvest.png)
+
+####Figure 2: Regional harvest by area over time 
+![](../figures/regional_harvest_area.png)
+
+### Cumulative harvest over first 7, 14, 21 days of fishery
+The harvest of GKC was consistent from 2000 to about 2012 or 2013.  This time series allows for an examination of different periods in the fisheries history.  For example, the early 2000s can be seen as a rebuilding time period,  peak harvest occured in the late 2000s, and then harvest started to decline in 2012/2013.  Graphically viewing cumulative harvest over time
+
+####Figure 3: Cumulative harvest by day for the first 21 days of the fishery for all of Southeast 
+![](../figures/cumul_harvest.png)
+
+### Pounds per boat per day - all Southeast
+The number of pounds landed per boat per day has been used as a proxy for CPUE during in-season management decisions.  The thoughts is that this statistic takes into account the effort, in number of boats participating in the season, and the duration of the season.  For example, if the GHL was reached quickly this value would be high since the season length would be a small number of days. 
+
+### Cumulative harvest over first 7, 14, 21 days of fishery
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
