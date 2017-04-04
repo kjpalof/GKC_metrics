@@ -45,25 +45,34 @@ fshtkt00_d %>% mutate(fishery_day = catch.day - start_day) -> fshtkt00_d
 
 ## total harvest by year -------------
 fshtkt %>% filter(!is.na(POUNDS))%>% group_by(year) %>% summarise(harvest = sum(POUNDS), effort = sum(POTS)) ->harvest_all
-ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")+ylab("Harvest, lbs")+
-  ggtitle("Southeast Harvest")
-ggsave("./figures/regional_harvest.png", width = 4.44, height = 2.77)
-# width = 4, height = 2.5, units = "in"
-# total harvest by area and year
-fshtkt %>% filter(!is.na(POUNDS), !is.na(POTS), Area != "") %>% group_by(Area, year) %>% 
+harvest_all %>% filter(year < 2017) %>% summarise(mean(harvest))
+harvest_all %>% filter(year > 1996) %>% summarise(mean(harvest))
+
+fig1 <- ggplot(harvest_all, aes(year, harvest)) +geom_bar(stat = "identity")+ylab("Harvest, lbs")+
+  ggtitle("Southeast Harvest") +geom_hline(yintercept = mean(harvest_all$harvest), color = "blue") +
+  geom_hline(yintercept = 453564, color = "red")
+png(file='./figures/regional_harvest.png', res=200, width=8, height=4, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(fig1,vp=vplayout(1,1:1))
+dev.off()
+
+
+# total harvest by area and year -------------
+fshtkt %>% filter(!is.na(POUNDS), !is.na(POTS), Area != "", Area != "Misc. Golden King Crab") %>% 
+  group_by(Area, year) %>% 
   summarise(harvest = sum(POUNDS)) ->harvest_area
 reg_har_area <-ggplot(harvest_area, aes(year, harvest, fill = Area))+geom_bar(stat = "identity") +
   scale_fill_brewer( palette = "Paired") + ggtitle("Harvest by area") +ylab("Harvest, lbs")
 #ggsave("./figures/regional_harvest_byarea.png")
 # save manuually 800 by 500 
-png(file='./figures/regional_harvest_area.png', res=200, width=8, height=6, units ="in")  
+png(file='./figures/regional_harvest_area.png', res=200, width=8, height=4, units ="in")  
 grid.newpage()
 pushViewport(viewport(layout=grid.layout(1,1)))
 vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
 print(reg_har_area,vp=vplayout(1,1:1))
 dev.off()
-
-
 
 
 # didn't need this to make graph ------------
@@ -113,10 +122,24 @@ fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
   group_by(year, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->allSE
 
 allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
-  filter(fishery_day < 22) %>% filter(year > 2008) -> allSE_09
+  filter(fishery_day < 22) %>% filter(year > 2009) -> allSE_09
 allSE_09%>% 
   ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
-  ggtitle("All Southeast cumulative harvest")+ylab("Cumulative Harvest, lbs")
+  ggtitle("All Southeast cumulative harvest, first 21 days")+ylab("Cumulative Harvest, lbs") 
+
+allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
+  filter(fishery_day < 22) %>% filter(year > 1999) -> allSE_00
+allSE_00%>% 
+  ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("All Southeast cumulative harvest, first 21 days")+ylab("Cumulative Harvest, lbs") -> fig3
+
+png(file='./figures/cumul_harvest.png', res=200, width=8, height=4, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(fig3,vp=vplayout(1,1:1))
+dev.off()
+
 
 # regression for first 21 days - by year - for ALL SOUTHEAST
 allSE_09 %>% # 
