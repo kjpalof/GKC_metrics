@@ -33,15 +33,22 @@ The fishery is managed seperately for each of seven management areas.  The major
 ####Figure 2: Regional harvest by area over time 
 ![](../figures/regional_harvest_area.png)
 
-### Cumulative harvest over first 7, 14, 21 days of fishery
-The harvest of GKC was consistent from 2000 to about 2012 or 2013.  This time series allows for an examination of different periods in the fisheries history.  For example, the early 2000s can be seen as a rebuilding time period,  peak harvest occured in the late 2000s, and then harvest started to decline in 2012/2013.  Graphically viewing cumulative harvest over time
+### Cumulative harvest over first 14 or 21 days of fishery
+The harvest of GKC was consistent from 2000 to about 2012 or 2013.  This time series allows for an examination of different periods in the fisheries history.  For example, the early 2000s can be seen as a rebuilding time period,  peak harvest occured in the late 2000s, and then harvest started to decline in 2012/2013.  Graphically viewing cumulative harvest over time allows for visualization of the slope of the cumulative harvest over time, which illustrates the differences between "good" and "bad" years (Figures 3 and 4). 
 
 ####Figure 3: Cumulative harvest by day for the first 21 days of the fishery for all of Southeast 
 ![](../figures/cumul_harvest.png)
 
+####Figure 4: Cumulative harvest by day for the first 14 days of the fishery for all of Southeast 
+![](../figures/cumul_harvest14.png)
+
+
+
 ### Pounds per boat per day - all Southeast
 The number of pounds landed per boat per day has been used as a proxy for CPUE during in-season management decisions.  The thoughts is that this statistic takes into account the effort, in number of boats participating in the season, and the duration of the season.  For example, if the GHL was reached quickly this value would be high since the season length would be a small number of days. 
 
+
+## GKC by Management Area
 ### Cumulative harvest over first 7, 14, 21 days of fishery
 
 
