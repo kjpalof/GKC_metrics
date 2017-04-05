@@ -118,9 +118,10 @@ ggplot(lb_boat_day2B, aes(year, lb_perboat))+ geom_point() + geom_line() +facet_
 fshtkt00_d %>% filter (Area == "East Central GKC", year == 2010) ->exam1
 
 ### All Southeast -------------------------
-fshtkt00_d %>% select(year, Area, fishery_day, POUNDS, POTS, NUMBERS) %>%
-  group_by(year, fishery_day) %>% summarise(pounds = sum(POUNDS)) ->allSE
+fshtkt00_d %>% select(year, Area, ADFG_NO, fishery_day, POUNDS, POTS, NUMBERS) %>%
+  group_by(year, fishery_day) %>% summarise(pounds = sum(POUNDS), boats = n_distinct((ADFG_NO))) ->allSE
 
+### All southeast -- 1st 21 days -------------
 allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
   filter(fishery_day < 22) %>% filter(year > 2009) -> allSE_09
 allSE_09%>% 
@@ -133,15 +134,47 @@ allSE_00%>%
   ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
   ggtitle("All Southeast cumulative harvest, first 21 days")+ylab("Cumulative Harvest, lbs") -> fig3
 
-png(file='./figures/cumul_harvest.png', res=200, width=8, height=4, units ="in")  
+png(file='./figures/cumul_harvest.png', res=200, width=7, height=5, units ="in")  
 grid.newpage()
 pushViewport(viewport(layout=grid.layout(1,1)))
 vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
 print(fig3,vp=vplayout(1,1:1))
 dev.off()
+### All southeast -- 1st 14 days -------------
+allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
+  filter(fishery_day < 15) %>% filter(year > 2009) -> allSE_09_2
+allSE_09_2%>% 
+  ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("All Southeast cumulative harvest, first 14 days")+ylab("Cumulative Harvest, lbs") 
 
+allSE %>% mutate(cumu = cumsum(pounds), Year = as.character(year)) %>% 
+  filter(fishery_day < 15) %>% filter(year > 1999) -> allSE_00_2
+allSE_00_2%>% 
+  ggplot(aes(fishery_day, cumu, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("All Southeast cumulative harvest, first 14 days")+ylab("Cumulative Harvest, lbs") -> fig4
 
-# regression for first 21 days - by year - for ALL SOUTHEAST
+png(file='./figures/cumul_harvest14.png', res=200, width=7, height=5, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(fig4,vp=vplayout(1,1:1))
+dev.off()
+
+### all southeast 21 days - with effort - number of boats
+allSE_00 %>% mutate(cumul_boats = cumsum(boats), cumul_byboat = cumu/ cumul_boats) -> allSE_00
+allSE_00%>% 
+  ggplot(aes(fishery_day, cumul_boats, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
+  ggtitle("All Southeast cumulative harvest, first 21 days")+ 
+  ylab("Cumulative Harvest by cumulative number of boats") -> figA
+
+png(file='./figures/cumul_harvest_byboat.png', res=200, width=7, height=5, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(figA,vp=vplayout(1,1:1))
+dev.off()
+
+### regression for first 21 days - by year - for ALL SOUTHEAST ----------------
 allSE_09 %>% # 
   group_by(year) %>%
   do(fit = lm(cumu ~ fishery_day, data =.)) -> one
