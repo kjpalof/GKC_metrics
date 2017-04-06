@@ -102,8 +102,11 @@ ggplot(lb_boat_day1A, aes(year, meanlb))+geom_line() + facet_wrap(~Area, scales 
 # pounds per boat per day - first 14 or 21 days -----------------------
 pounds_dayA %>% filter(fishery_day < 15, year > 2010, Area == "East Central GKC") %>% mutate (Year = as.character(year)) %>% 
   ggplot(aes(fishery_day, lb_perboat, color = Year, group = year)) +geom_point() +
-  geom_smooth(method = "lm", fill =NA) + facet_wrap(~Area, scales = "free_y")+
+   geom_line() + facet_wrap(~Area, scales = "free_y")+
   ggtitle("Pounds per boat by day, first 14 days")+ylab("Pounds per boat") 
+
+
+#geom_smooth(method = "lm", fill =NA)
 
 ### pounds per boat day - Adam's method ---------------------
 fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% mutate(lengthS = end_day - start_day) %>% 
