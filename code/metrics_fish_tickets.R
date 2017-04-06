@@ -81,14 +81,14 @@ harvest_area1 %>% select(-`Misc. Golden King Crab`) %>% replace(is.na(.), 0) %>%
   mutate(total = rowSums(.[2:7]))-> harvest_area2
 #----------------
 
-### Attempt to calculate pounds per day per boat - All of southeast 
+### Attempt to calculate pounds per day per boat - All of southeast ----------------
 fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% 
   group_by(year, fishery_day) %>% summarise( pounds = sum(POUNDS), boats = n_distinct(ADFG_NO))-> pounds_day
 
 pounds_day %>% mutate(lb_perboat = pounds/boats) ->pounds_day
 pounds_day %>% group_by(year) %>% summarise (meanlb = mean(lb_perboat)) -> lb_boat_day1
 
-ggplot(lb_boat_day1, aes(year, meanlb))+geom_point()
+ggplot(lb_boat_day1, aes(year, meanlb))+geom_point() +geom_line()
 
 ## By Area 
 fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% 
@@ -99,8 +99,13 @@ pounds_dayA %>% group_by(Area, year) %>% summarise (meanlb = mean(lb_perboat)) -
 ggplot(lb_boat_day1A, aes(year, meanlb))+geom_line() + facet_wrap(~Area, scales = "free_y")+
   ggtitle("Average pounds per boat per day over season")
 
+# pounds per boat per day - first 14 or 21 days -----------------------
+pounds_dayA %>% filter(fishery_day < 15, year > 2010, Area == "East Central GKC") %>% mutate (Year = as.character(year)) %>% 
+  ggplot(aes(fishery_day, lb_perboat, color = Year, group = year)) +geom_point() +
+  geom_smooth(method = "lm", fill =NA) + facet_wrap(~Area, scales = "free_y")+
+  ggtitle("Pounds per boat by day, first 14 days")+ylab("Pounds per boat") 
 
-### pounds per boat day - Adam's method
+### pounds per boat day - Adam's method ---------------------
 fshtkt00_d %>% filter(!is.na(POUNDS), Area != "") %>% mutate(lengthS = end_day - start_day) %>% 
   group_by(year) %>% summarise(pounds = sum(POUNDS), boats = n_distinct(ADFG_NO), maxS = max(lengthS)) %>% 
   mutate(lb_perboatday = (pounds/boats)/maxS) -> lb_boat_day2
@@ -160,7 +165,7 @@ vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
 print(fig4,vp=vplayout(1,1:1))
 dev.off()
 
-### all southeast 21 days - with effort - number of boats
+### all southeast 21 days - with effort - number of boats -----------------
 allSE_00 %>% mutate(cumul_boats = cumsum(boats), cumul_byboat = cumu/ cumul_boats) -> allSE_00
 allSE_00%>% 
   ggplot(aes(fishery_day, cumul_boats, colour = Year, group = year)) +geom_point() + geom_smooth(method = "lm", fill =NA)+
@@ -173,6 +178,9 @@ pushViewport(viewport(layout=grid.layout(1,1)))
 vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
 print(figA,vp=vplayout(1,1:1))
 dev.off()
+
+
+
 
 ### regression for first 21 days - by year - for ALL SOUTHEAST ----------------
 allSE_09 %>% # 
