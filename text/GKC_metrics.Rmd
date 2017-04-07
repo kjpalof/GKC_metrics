@@ -52,20 +52,19 @@ An attempt to correct for the amount of effort in each season was performed by d
 ![](../figures/cumul_harvest_14_byboat.png)
 
 
-### Pounds per boat per day - all Southeast
-The number of pounds landed per boat per day has been used as a proxy for CPUE during in-season management decisions.  The thought is that this statistic takes into account the effort, in number of boats participating in the season, and the duration of the season.  For example, if the GHL was reached quickly this value would be high since the season length would be a small number of days. Currently, this metric is calculated as a summation of the season - the total harvest divided by the season length (in days) and then further divided by the number of vessels participating in the season.  This metric is helpful when comparing seasons once the fishery is complete, but since it uses season length can be skewed when used for in season management.  
+### Pounds per boat per day - by Management area
+The number of pounds landed per boat per day has been used as a proxy for CPUE during in-season management decisions (Figure 6).  The thought is that this statistic takes into account the effort, in number of boats participating in the season, and the duration of the season.  For example, if the GHL was reached quickly this value would be high since the season length would be a small number of days. Currently, this metric is calculated as a summation of the season - the total harvest divided by the season length (in days) and then further divided by the number of vessels participating in the season.  This metric is helpful when comparing seasons once the fishery is complete, but since it uses season length can be skewed when used for in season management since the currrent season is ongoing.  Additionally, this metric is summed over the entire season so it does not capture the variability that is occuring throughout the season.  
 
-Another approach - similar to this one would be to look at the pounds per boat per day for just the first 14 or 21 days of the fishery
+Another approach, similar to this one, was to look at the pounds per boat per day for just the first 14 or 21 days of the fishery.  The was attemped but the variablity was high and there were not patterns between "good" harvest years and "poor" harvest years (like those seen with cumulative harvest). 
 
-####Figure 5: Cumulative harvest per boat for the first 21 days of the fishery for all of Southeast 
+####Figure 6: Pounds (lb) per boat/day for the entire season by management area 
 ![](../figures/cumul_harvest_14_byboat.png)
 
 
+### Logbook CPUE 
+Logbook CPUE is another inseason metric that can be used in the first month of the fishery to compare the current seasons progress to previous years.  Although CPUE does NOT take into account soak time, taking the average CPUE over a first month of the fishery (based on logbook data entries) does account the variability among boats and days.  Additionally, CPUE, in terms of legal crab caught per pot, does adequately acknowlege the amount of effort put forth from the fleet.  Ideally the number of pots and soak time would provide full coverage all the effort put forth.  In addition to visually displaying the average CPUE for the first month of the fishery, Figure 7 also has the mean CPUE from 2000 - 2016 (black line) and 20% of this mean (red line). 
 
 
-Do this approach and add figures here. 
+####Figure 7: Average CPUE for the first month of the fishery by management area 
+![](../figures/firstmonth_CPUE.png)
 
-#### Add figures.
-
-
-## G
