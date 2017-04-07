@@ -35,8 +35,18 @@ cpue_month1 %>% group_by(Area) %>% summarise(CPUE_allyears = mean(meanC)) %>%
 cpue_month1 %>% left_join(mean_allyears) -> cpue_month1
 
 ggplot(cpue_month1, aes(year, meanC)) +geom_point(aes(colour = Area)) +geom_line(aes(colour = Area))
+
+
 ggplot(cpue_month1, aes(year, meanC)) +geom_point() +geom_line()+facet_wrap(~Area, scales = "free_y") +
-  geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("First month of fishery")
+  geom_line(aes(y = CPUE_allyears)) + geom_line(aes(y = mean20), color ="red") + ggtitle("First month of fishery")+
+  ylab("Average CPUE") -> fig7
+png(file='./figures/firstmonth_CPUE.png', res=200, width=7, height=5, units ="in")  
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,1)))
+vplayout<-function(x,y) viewport (layout.pos.row=x, layout.pos.col=y)
+print(fig7,vp=vplayout(1,1:1))
+dev.off()
+
 month1data %>% 
   group_by(year,Area_code) %>% 
   ggplot(aes(year,cpue))+
