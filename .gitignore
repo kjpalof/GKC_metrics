@@ -6,3 +6,5 @@
 *.csv
 *.png
 ./data
+*.docx
+*.html
