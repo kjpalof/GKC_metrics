@@ -12,3 +12,18 @@ library(tidyverse)
 library(reshape2)
 library(TropFishR)
 
+### load data ---------
+gkc <- read.csv("./data/gkc_fishticket_all_17.csv")
+head(gkc)
+
+gkc %>% select(Season = SEASON, Area = I_FISHERY, numbers = NUMBERS, pounds = POUNDS, 
+               pots = POTS, Cfec_no = CFEC_NO) -> gkc1
+
+head(gkc1)
+
+### catch by season with effort -----------
+gkc1 %>% group_by(Season, Area) %>% 
+  summarise(number = sum(numbers), biomass = sum(pounds), pot_effort = sum(pots),
+              permits = length(unique(Cfec_no)))
+  
+
