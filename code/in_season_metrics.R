@@ -1,7 +1,7 @@
 #K.Palof      3-1-2017
 # GKC logbook data - examine ideas for in season metrics for closures / GHLs
 
-#rm(list = ls()) # clear workspace 
+rm(list = ls()) # clear workspace 
 
 ## Load packages ---------------------------------------------------
 library(tidyverse)
