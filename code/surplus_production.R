@@ -22,7 +22,7 @@ gkc %>% select(Season = SEASON, Area = I_FISHERY, numbers = NUMBERS, pounds = PO
 head(gkc1)
 
 ### catch by season with effort -----------
-gkc1 %>% group_by(Season, Area) %>% 
+gkc1 %>% group_by(Area, Season) %>% 
   summarise(number = sum(numbers), biomass = sum(pounds), pot_effort = sum(pots),
               permits = length(unique(Cfec_no)))
   
