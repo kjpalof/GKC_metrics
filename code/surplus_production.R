@@ -10,7 +10,8 @@
 ## Load packages ---------------------------------------------------
 library(tidyverse)
 library(reshape2)
-#library(TropFishR)
+#library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
+
 
 ### load data ---------
 gkc <- read.csv("./data/gkc_fishticket_all_17.csv")
@@ -26,12 +27,34 @@ head(gkc1)
 # need to add season here to match fish tickets
 gkc_log %>% select(Year = YEAR, Area = I_FISHERY, no_crab = TARGET_SPECIES_RETAINED, 
                    pots = NUMBER_POTS_LIFTED, Cfec_no = CFEC_NO) -> gkc1_log
-gkc1_log %>% mutate(Season)
+gkc1_log %>% mutate(Season = ifelse (Year == 2000, "Oct1999 - Sep00", 
+                              ifelse(Year == 2001,"Oct2000 - Sep01", 
+                               ifelse(Year == 2002, "Oct2001 - Sep02", 
+                                ifelse(Year == 2003, "Oct2002 - Sep03", 
+                                 ifelse(Year == 2004, "Oct2003 - Sep04", 
+                                  ifelse(Year == 2005, "Oct2004 - Sep05", 
+                                    ifelse(Year == 2006, "Oct2005 - Sep06", 
+                                      ifelse(Year == 2007, "Oct2006 - Sep07", 
+                                       ifelse(Year == 2008, "Oct2007 - Sep08", 
+                                        ifelse(Year == 2009, "Oct2008 - Sep09", 
+                                         ifelse (Year == 2010, "Oct2009 - Sep10", 
+                                          ifelse(Year == 2011, "Oct2010 - Sep11", 
+                                           ifelse(Year == 2012, "Oct2011 - Sep12", 
+                                            ifelse(Year == 2013, "Oct2012 - Sep13", 
+                                             ifelse(Year == 2014, "Oct2013 - Sep14", 
+                                              ifelse(Year == 2015, "Oct2014 - Sep15", 
+                                               ifelse(Year == 2016, "Oct2015 - Sep16", 
+       ifelse(Year == 2017, "Oct2016 - Sep17", ""))))))))))))))))))) -> gkc1_log
 head(gkc1_log)
+### logbook catch by season
+gkc1_log %>% group_by(Area, Season, Year) %>% 
+  summarise(no_crabs = sum(no_crab), pot_effort = sum(pots),
+            permits = length(unique(Cfec_no))) -> gkc2_log
+
 
 ### fish ticket catch by season -----------
 gkc1 %>% group_by(Area, Season) %>% 
-  summarise(number = sum(numbers), biomass = sum(pounds), pot_effort = sum(pots),
+  summarise(number = sum(numbers), biomass = sum(pounds), ft_pots = sum(pots),
               permits = length(unique(Cfec_no))) -> gkc2
 
 as.data.frame(gkc2 %>% filter(Area == "East Central GKC")) # checks out with what I have in excel surplus production file from 2013
@@ -39,4 +62,5 @@ as.data.frame(gkc2 %>% filter(Area == "East Central GKC")) # checks out with wha
 ### Area models ----------------
 # each area has it's own model - one with fish ticket data and # permits
 #           - one with logbook data and # pot lifts.
-
+# merge gkc2 and gkc2_log so have catch in numbers, no_crab, and pounds with pots from both and permits.
+gkc2 %>% left_join(gkc2_log) -> gkc3
