@@ -80,13 +80,13 @@ unique(gkc3$Area)
 
 ### East Central -----
 gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
-# need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
-gkc3_east %>% mutate(pots = ifelse(is.na(Year), ft_pots, pot_effort)) -> gkc3_east
+
 #write.csv(gkc3_east, './results/east_central_gkc.csv', row.names = FALSE)
 
 ### prod model equlibrium ----------
 # data is dataframe with year (year vector), Y (catch in weight), f (fishing effort),
-gkc3_east %>% select(year = Season, Y = biomass, f = pots) ->east_input
+gkc3_east %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
+  filter(year >= 1984)->east_input
 east_input %>% as.data.frame(east_input) %>% select(-Area)-> east_input1
 
 prod_mod(east_input1, plot = TRUE)
