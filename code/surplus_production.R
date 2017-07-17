@@ -8,6 +8,7 @@
 # add recent data from fish tickets or log books???
 
 ## Load packages ---------------------------------------------------
+library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
 library(tidyverse)
 library(reshape2)
 #library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
@@ -77,3 +78,5 @@ gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
 # need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
 gkc3_east %>% mutate(pots = ifelse(is.na(Year), ft_pots, pot_effort)) -> gkc3_east
 
+### prod model equlibrium ----------
+prod_mod()
