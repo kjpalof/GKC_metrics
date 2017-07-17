@@ -70,6 +70,9 @@ gkc2 %>% filter(Season == "Oct2006 - Sep07")
 gkc2 %>% left_join(gkc2_log) -> gkc3
 head(gkc3)
 
+# need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
+gkc3 %>% mutate(pots = ifelse(Year <= 1999, ft_pots, pot_effort)) -> gkc3
+
 unique(gkc3$Area)
 # Areas: ""                           "East Central GKC"           "Icy Strait GKC"            
 # "Lower Chatham Strait GKC"   "Mid-Chatham Strait GKC"     "Misc. Golden King Crab"    
