@@ -17,6 +17,7 @@ library(reshape2)
 ### load data ---------
 gkc <- read.csv("./data/gkc_fishticket_all_17.csv")
 gkc_log <- read.csv("./data/gkc_logbook_all_030117.csv")
+season_year <- read.csv("./data/season_year.csv")
 head(gkc)
 head(gkc_log)
 
@@ -57,6 +58,7 @@ gkc1_log %>% group_by(Area, Season, Year) %>%
 gkc1 %>% group_by(Area, Season) %>% 
   summarise(number = sum(numbers, na.rm = TRUE), biomass = sum(pounds, na.rm = TRUE), ft_pots = sum(pots, na.rm=TRUE),
               ft_permits = length(unique(Cfec_no))) -> gkc2
+gkc2 %>% left_join(season_year) -> gkc2
 
 as.data.frame(gkc2 %>% filter(Area == "East Central GKC")) # checks out with what I have in excel surplus production file from 2013
 gkc2 %>% filter(Season == "Oct2006 - Sep07")
@@ -77,6 +79,11 @@ unique(gkc3$Area)
 gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
 # need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
 gkc3_east %>% mutate(pots = ifelse(is.na(Year), ft_pots, pot_effort)) -> gkc3_east
+#write.csv(gkc3_east, './results/east_central_gkc.csv', row.names = FALSE)
 
 ### prod model equlibrium ----------
-prod_mod()
+# data is dataframe with year (year vector), Y (catch in weight), f (fishing effort),
+gkc3_east %>% select(year = Season, Y = biomass, f = pots) ->east_input
+east_input %>% as.data.frame(east_input) %>% select(-Area)-> east_input1
+
+prod_mod(east_input1, plot = TRUE)
