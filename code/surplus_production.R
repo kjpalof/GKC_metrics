@@ -75,5 +75,5 @@ unique(gkc3$Area)
 ### East Central -----
 gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
 # need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
-gkc3_east %>% mutate(pots = ifelse(Year >= 2000, pot_effort, 
-                                   ifelse(is.na(Year), ft_pots, 0))) -> gkc3_east
+gkc3_east %>% mutate(pots = ifelse(is.na(Year), ft_pots, pot_effort)) -> gkc3_east
+
