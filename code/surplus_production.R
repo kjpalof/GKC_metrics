@@ -48,19 +48,32 @@ gkc1_log %>% mutate(Season = ifelse (Year == 2000, "Oct1999 - Sep00",
 head(gkc1_log)
 ### logbook catch by season
 gkc1_log %>% group_by(Area, Season, Year) %>% 
-  summarise(no_crabs = sum(no_crab), pot_effort = sum(pots),
+  summarise(no_crabs = sum(no_crab, na.rm = TRUE), pot_effort = sum(pots, na.rm = TRUE),
             permits = length(unique(Cfec_no))) -> gkc2_log
 
 
 ### fish ticket catch by season -----------
 gkc1 %>% group_by(Area, Season) %>% 
-  summarise(number = sum(numbers), biomass = sum(pounds), ft_pots = sum(pots),
-              permits = length(unique(Cfec_no))) -> gkc2
+  summarise(number = sum(numbers, na.rm = TRUE), biomass = sum(pounds, na.rm = TRUE), ft_pots = sum(pots, na.rm=TRUE),
+              ft_permits = length(unique(Cfec_no))) -> gkc2
 
 as.data.frame(gkc2 %>% filter(Area == "East Central GKC")) # checks out with what I have in excel surplus production file from 2013
+gkc2 %>% filter(Season == "Oct2006 - Sep07")
 
 ### Area models ----------------
 # each area has it's own model - one with fish ticket data and # permits
 #           - one with logbook data and # pot lifts.
 # merge gkc2 and gkc2_log so have catch in numbers, no_crab, and pounds with pots from both and permits.
 gkc2 %>% left_join(gkc2_log) -> gkc3
+head(gkc3)
+
+unique(gkc3$Area)
+# Areas: ""                           "East Central GKC"           "Icy Strait GKC"            
+# "Lower Chatham Strait GKC"   "Mid-Chatham Strait GKC"     "Misc. Golden King Crab"    
+# "North Stephens Passage GKC" "Northern GKC"               "Southern GKC"    
+
+### East Central -----
+gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
+# need one pot column - prior to 2000 (ft_pots) 2000 and after (pot_effort)
+gkc3_east %>% mutate(pots = ifelse(Year >= 2000, pot_effort, 
+                                   ifelse(is.na(Year), ft_pots, 0))) -> gkc3_east
