@@ -89,4 +89,13 @@ gkc3_east %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) 
   filter(year >= 1984)->east_input
 east_input %>% as.data.frame(east_input) %>% select(-Area)-> east_input1
 
-prod_mod(east_input1, plot = TRUE)
+equil_ec <- prod_mod(east_input1, plot = TRUE)
+equil_ec
+
+### prod model time series ------
+# these don't appear to be giving realistic estimates....
+prod_mod_ts(east_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
+            plot = TRUE)
+
+prod_mod_ts(east_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
+            plot = TRUE)
