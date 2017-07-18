@@ -78,10 +78,12 @@ unique(gkc3$Area)
 # "Lower Chatham Strait GKC"   "Mid-Chatham Strait GKC"     "Misc. Golden King Crab"    
 # "North Stephens Passage GKC" "Northern GKC"               "Southern GKC"    
 
+
+# create area files for each one of the above areas
 ### East Central -----
 gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
 
-#write.csv(gkc3_east, './results/east_central_gkc.csv', row.names = FALSE)
+write.csv(gkc3_east, './results/east_central_gkc.csv', row.names = FALSE)
 
 ### prod model equlibrium ----------
 # data is dataframe with year (year vector), Y (catch in weight), f (fishing effort),
