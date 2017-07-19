@@ -5,6 +5,6 @@
 *.Rproj
 *.csv
 *.png
-./data
+*./data
 *.docx
 *.html
