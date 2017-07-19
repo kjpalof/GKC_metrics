@@ -77,12 +77,29 @@ unique(gkc3$Area)
 # Areas: ""                           "East Central GKC"           "Icy Strait GKC"            
 # "Lower Chatham Strait GKC"   "Mid-Chatham Strait GKC"     "Misc. Golden King Crab"    
 # "North Stephens Passage GKC" "Northern GKC"               "Southern GKC"    
-
-
 # create area files for each one of the above areas
+### Southern  -----
+gkc3 %>% filter(Area == "Southern GKC") -> gkc3_south
+write.csv(gkc3_south, './results/south_gkc.csv', row.names = FALSE)
+### Northern   -----
+gkc3 %>% filter(Area == "Northern GKC") -> gkc3_north
+write.csv(gkc3_north, './results/north_gkc.csv', row.names = FALSE)
+### North Stephens Passage   -----
+gkc3 %>% filter(Area == "North Stephens Passage GKC") -> gkc3_nsp
+write.csv(gkc3_nsp, './results/nsp_gkc.csv', row.names = FALSE)
+### Mid-Chatham Strait  -----
+gkc3 %>% filter(Area == "Mid-Chatham Strait GKC") -> gkc3_midc
+write.csv(gkc3_midc, './results/midc_gkc.csv', row.names = FALSE)
+### Lower Chatham  -----
+gkc3 %>% filter(Area == "Lower Chatham Strait GKC") -> gkc3_lowerc
+write.csv(gkc3_lowerc, './results/lowerc_gkc.csv', row.names = FALSE)
+
+### Icy Strait  -----
+gkc3 %>% filter(Area == "Icy Strait GKC") -> gkc3_icy
+write.csv(gkc3_icy, './results/icy_gkc.csv', row.names = FALSE)
+
 ### East Central -----
 gkc3 %>% filter(Area == "East Central GKC") -> gkc3_east
-
 write.csv(gkc3_east, './results/east_central_gkc.csv', row.names = FALSE)
 
 ### prod model equlibrium ----------
