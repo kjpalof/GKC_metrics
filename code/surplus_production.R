@@ -130,6 +130,12 @@ gkc3_icy %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %
 icy_input %>% as.data.frame(icy_input) %>% select(-Area)-> icy_input1
 equil_icy <- prod_mod(icy_input1, plot = TRUE)
 equil_icy
+
+gkc3_south %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
+  filter(year >= 1985)->south_input
+south_input %>% as.data.frame(south_input) %>% select(-Area)-> south_input1
+equil_south <- prod_mod(south_input1, plot = TRUE)
+equil_south
 ### prod model time series ------
 # these don't appear to be giving realistic estimates....
 prod_mod_ts(east_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
@@ -141,4 +147,9 @@ prod_mod_ts(east_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit 
 prod_mod_ts(icy_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
             plot = TRUE)
 #prod_mod_ts(icy_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
+#            plot = TRUE)
+
+prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
+            plot = TRUE)
+#prod_mod_ts(south_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
 #            plot = TRUE)
