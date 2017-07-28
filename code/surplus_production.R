@@ -121,11 +121,15 @@ equil_ec
 
 gkc3_nsp %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
   filter(year >= 1985)->nsp_input
-nsp_input %>% as.data.frame(east_input) %>% select(-Area)-> nsp_input1
+nsp_input %>% as.data.frame(nsp_input) %>% select(-Area)-> nsp_input1
 equil_nsp <- prod_mod(nsp_input1, plot = TRUE)
 equil_nsp
 
-
+gkc3_icy %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
+  filter(year >= 1985)->icy_input
+icy_input %>% as.data.frame(icy_input) %>% select(-Area)-> icy_input1
+equil_icy <- prod_mod(icy_input1, plot = TRUE)
+equil_icy
 ### prod model time series ------
 # these don't appear to be giving realistic estimates....
 prod_mod_ts(east_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
@@ -133,3 +137,7 @@ prod_mod_ts(east_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_
 
 prod_mod_ts(east_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
             plot = TRUE)
+
+prod_mod_ts(icy_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
+            plot = TRUE)
+
