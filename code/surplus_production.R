@@ -140,4 +140,5 @@ prod_mod_ts(east_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit 
 
 prod_mod_ts(icy_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
             plot = TRUE)
-
+#prod_mod_ts(icy_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
+#            plot = TRUE)
