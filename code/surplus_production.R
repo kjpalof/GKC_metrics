@@ -81,6 +81,10 @@ unique(gkc3$Area)
 ### Southern  -----
 gkc3 %>% filter(Area == "Southern GKC") -> gkc3_south
 write.csv(gkc3_south, './results/south_gkc.csv', row.names = FALSE)
+
+ggplot(gkc3_south, aes(Year, biomass)) +geom_point() +geom_line()
+ggplot(gkc3_south, aes(pots, biomass)) +geom_point()
+
 ### Northern   -----
 gkc3 %>% filter(Area == "Northern GKC") -> gkc3_north
 write.csv(gkc3_north, './results/north_gkc.csv', row.names = FALSE)
