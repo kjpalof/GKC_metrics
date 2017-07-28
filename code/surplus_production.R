@@ -83,7 +83,7 @@ gkc3 %>% filter(Area == "Southern GKC") -> gkc3_south
 write.csv(gkc3_south, './results/south_gkc.csv', row.names = FALSE)
 
 ggplot(gkc3_south, aes(Year, biomass)) +geom_point() +geom_line()
-ggplot(gkc3_south, aes(pots, biomass)) +geom_point()
+ggplot(gkc3_south, aes(pots, biomass)) +geom_point() + 
 
 ### Northern   -----
 gkc3 %>% filter(Area == "Northern GKC") -> gkc3_north
@@ -91,6 +91,10 @@ write.csv(gkc3_north, './results/north_gkc.csv', row.names = FALSE)
 ### North Stephens Passage   -----
 gkc3 %>% filter(Area == "North Stephens Passage GKC") -> gkc3_nsp
 write.csv(gkc3_nsp, './results/nsp_gkc.csv', row.names = FALSE)
+
+ggplot(gkc3_nsp, aes(Year, biomass)) +geom_point() +geom_line()
+ggplot(gkc3_nsp, aes(pots, biomass)) +geom_point()
+
 ### Mid-Chatham Strait  -----
 gkc3 %>% filter(Area == "Mid-Chatham Strait GKC") -> gkc3_midc
 write.csv(gkc3_midc, './results/midc_gkc.csv', row.names = FALSE)
@@ -114,6 +118,13 @@ east_input %>% as.data.frame(east_input) %>% select(-Area)-> east_input1
 
 equil_ec <- prod_mod(east_input1, plot = TRUE)
 equil_ec
+
+gkc3_nsp %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
+  filter(year >= 1985)->nsp_input
+nsp_input %>% as.data.frame(east_input) %>% select(-Area)-> nsp_input1
+equil_nsp <- prod_mod(nsp_input1, plot = TRUE)
+equil_nsp
+
 
 ### prod model time series ------
 # these don't appear to be giving realistic estimates....
