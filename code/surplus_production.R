@@ -83,7 +83,7 @@ gkc3 %>% filter(Area == "Southern GKC") -> gkc3_south
 write.csv(gkc3_south, './results/south_gkc.csv', row.names = FALSE)
 
 ggplot(gkc3_south, aes(Year, biomass)) +geom_point() +geom_line()
-ggplot(gkc3_south, aes(pots, biomass)) +geom_point() + 
+ggplot(gkc3_south, aes(pots, biomass)) +geom_point() 
 
 ### Northern   -----
 gkc3 %>% filter(Area == "Northern GKC") -> gkc3_north
@@ -153,3 +153,9 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
             plot = TRUE)
 #prod_mod_ts(south_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
 #            plot = TRUE)
+
+
+### figures with MSY --------------
+ggplot(gkc3_south, aes(Year, biomass)) +geom_point() +geom_line()
+
+
