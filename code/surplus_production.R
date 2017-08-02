@@ -11,6 +11,12 @@
 library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
 library(tidyverse)
 library(reshape2)
+library(extrafont)
+loadfonts(device="win")
+windowsFonts(Times=windowsFont("TT Times New Roman"))
+theme_set(theme_bw(base_size=12,base_family='Times New Roman')+
+            theme(panel.grid.major = element_blank(), 
+                  panel.grid.minor = element_blank()))
 #library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
 
 
