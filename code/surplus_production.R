@@ -12,6 +12,8 @@ library(TropFishR) # this overwrites some of the tidyverse commands.  need to lo
 library(tidyverse)
 library(reshape2)
 library(extrafont)
+library(gridExtra)
+library(grid)
 loadfonts(device="win")
 windowsFonts(Times=windowsFont("TT Times New Roman"))
 theme_set(theme_bw(base_size=12,base_family='Times New Roman')+
@@ -134,7 +136,10 @@ equil_nsp
 gkc3_icy %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
   filter(year >= 1985)->icy_input
 icy_input %>% as.data.frame(icy_input) %>% select(-Area)-> icy_input1
+icy_input %>% as.data.frame(icy_input) %>% select(-Area) %>% 
+  filter(year <=2014) -> icy_input2
 equil_icy <- prod_mod(icy_input1, plot = TRUE)
+equil_icy <- prod_mod(icy_input2, plot = TRUE)
 equil_icy
 
 gkc3_south %>% select(year = Year, Y = biomass, f = pots) %>% filter(year <2017) %>% 
@@ -152,6 +157,8 @@ prod_mod_ts(east_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit 
 
 prod_mod_ts(icy_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
             plot = TRUE)
+prod_mod_ts(icy_input2, method = "Schaefer", B0_init = NA, B0_est = NA, effort_unit = 1, 
+            plot = TRUE)
 #prod_mod_ts(icy_input1, method = "Fox", B0_init = NA, B0_est = NA, effort_unit = 1, 
 #            plot = TRUE)
 
@@ -162,25 +169,67 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 
 
 ### figures with MSY --------------
-gkc3_south %>% filter(Year >= 1985)->gkc3_south1
-ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
-  ggtitle("Southern GKC")+ylab("Harvest (lb)") + 
-  geom_hline(yintercept = 22795, linetype = "dashed") +
+## East Central -----------
+gkc3_east %>% filter(Year >= 1985 & Year <2017)->gkc3_east1
+east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+  ggtitle("East Central GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 211000, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-#north stephens pass - only want 1985 on.--------
-gkc3_nsp %>% filter(Year >= 1985)->gkc3_nsp1
-ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
-  ggtitle("North Stephens Passage GKC")+ylab("Harvest (lb)") + 
-  geom_hline(yintercept = 22817, linetype = "dashed")+
+## Northern ----------
+gkc3_north %>% filter(Year >= 1985& Year <2017)->gkc3_north1
+north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+  ggtitle("Northern GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 138800, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-#icy strait - only want 1985 on.-------------
-gkc3_icy %>% filter(Year >= 1985)->gkc3_icy1
-ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
+#icy strait - -------------
+#only want 1985 on.
+gkc3_icy %>% filter(Year >= 1985 & Year <2017)->gkc3_icy1
+icy <- ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   ggtitle("Icy Strait GKC")+ylab("Harvest (lb)") + 
-  geom_hline(yintercept = 17374, linetype = "dashed")+
+  geom_hline(yintercept = 53800, linetype = "dashed")+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+
+#north stephens pass -------
+#- only want 1985 on.-
+gkc3_nsp %>% filter(Year >= 1985 & Year <2017)->gkc3_nsp1
+nsp <- ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
+  ggtitle("North Stephens Passage GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 22800, linetype = "dashed")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+# mid-chatham strait ----------
+gkc3_midc %>% filter(Year >= 1985 & Year <2017)->gkc3_midc1
+mid <- ggplot(gkc3_midc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+  ggtitle("Mid-Chatham Strait GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 90600, linetype = "dashed") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+# lower chatham strait ----------
+gkc3_lowerc %>% filter(Year >= 1985 & Year <2017)->gkc3_lowerc1
+lower <- ggplot(gkc3_lowerc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+  ggtitle("Lower Chatham Strait GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 21700, linetype = "dashed") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+# southern -------
+gkc3_south %>% filter(Year >= 1985 & Year <2017)->gkc3_south1
+south <- ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+  ggtitle("Southern GKC")+ylab("Harvest (lb)") + 
+  geom_hline(yintercept = 22800, linetype = "dashed") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+png('./results/redcrab/Excursion/figure1.png', res= 300, width = 8, height =11, units = "in")
+grid.arrange(p1, p2, p3, p4, ncol = 1)
+dev.off()
+grid.arrange(east, north, icy, nsp, ncol = 2)
+grid.arrange(mid, lower, south, ncol = 2)
