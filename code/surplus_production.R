@@ -236,3 +236,8 @@ dev.off()
 
 ## Figure CPUE vs pot lifts
 head(gkc3_east)
+
+
+### average harvest ------
+gkc3 %>% filter(Year >= 2000 & Year <2017) %>% group_by(Area) %>% 
+  summarise(avg_biomass = mean(biomass))
