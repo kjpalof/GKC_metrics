@@ -242,3 +242,21 @@ head(gkc3_east)
 # exclude 2017 since season was not complete when this data was pulled
 gkc3 %>% filter(Year >= 2000 & Year <2017) %>% group_by(Area) %>% 
   summarise(avg_biomass = mean(biomass))
+
+
+### figures CPUE/ effort --------------
+gkc3_east1 %>% mutate(CPUE = biomass/ pots)-> gkc3_east1
+ggplot(gkc3_east1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("East Central GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(method = 'lm', se = FALSE)
+
+gkc3_north1 %>% mutate(CPUE = biomass/ pots)-> gkc3_north1
+ggplot(gkc3_north1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("Northern GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(method = 'lm', se = FALSE)
