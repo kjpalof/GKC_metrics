@@ -162,13 +162,16 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 
 
 ### figures with MSY --------------
-ggplot(gkc3_south, aes(Year, biomass)) +geom_point() +geom_line()+
+gkc3_south %>% filter(Year >= 1985)->gkc3_south1
+ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("Southern GKC")+ylab("Harvest (lb)") + 
-  geom_hline(yintercept = 22795, linetype = "dashed")
+  geom_hline(yintercept = 22795, linetype = "dashed") +
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_continuous(breaks = seq(min(1985),max(2017), by =5))
 
 #north stephens pass - only want 1985 on.
 gkc3_nsp %>% filter(Year >= 1985)->gkc3_nsp1
-ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point() +geom_line()+
+ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   ggtitle("North Stephens Passage GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 22817, linetype = "dashed")+theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1980, 2020, 5), limits = c(1980, 2020))
