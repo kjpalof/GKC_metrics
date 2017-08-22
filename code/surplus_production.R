@@ -239,5 +239,6 @@ head(gkc3_east)
 
 
 ### average harvest ------
+# exclude 2017 since season was not complete when this data was pulled
 gkc3 %>% filter(Year >= 2000 & Year <2017) %>% group_by(Area) %>% 
   summarise(avg_biomass = mean(biomass))
