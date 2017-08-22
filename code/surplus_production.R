@@ -260,3 +260,11 @@ ggplot(gkc3_north1, aes(pots, CPUE)) +geom_point(size =3) +
   scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
   theme(plot.title = element_text(hjust = 0.5))+
   geom_smooth(method = 'lm', se = FALSE)
+
+gkc3_icy1 %>% mutate(CPUE = biomass/ pots)-> gkc3_icy1
+ggplot(gkc3_icy1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("Icy Strait GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(method = 'lm', se = FALSE)
