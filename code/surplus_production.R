@@ -169,7 +169,7 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 
 
 ### figures with MSY --------------
-## East Central -----------
+## East Central 
 gkc3_east %>% filter(Year >= 1985 & Year <2017)->gkc3_east1
 east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("East Central GKC")+ylab("Harvest (lb)") + 
@@ -177,7 +177,7 @@ east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-## Northern ----------
+## Northern 
 gkc3_north %>% filter(Year >= 1985& Year <2017)->gkc3_north1
 north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("Northern GKC")+ylab("Harvest (lb)") + 
@@ -185,7 +185,7 @@ north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-#icy strait - -------------
+#icy strait -
 #only want 1985 on.
 gkc3_icy %>% filter(Year >= 1985 & Year <2017)->gkc3_icy1
 icy <- ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
@@ -194,8 +194,7 @@ icy <- ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-
-#north stephens pass -------
+#north stephens pass 
 #- only want 1985 on.-
 gkc3_nsp %>% filter(Year >= 1985 & Year <2017)->gkc3_nsp1
 nsp <- ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
@@ -204,7 +203,7 @@ nsp <- ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-# mid-chatham strait ----------
+# mid-chatham strait 
 gkc3_midc %>% filter(Year >= 1985 & Year <2017)->gkc3_midc1
 mid <- ggplot(gkc3_midc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("Mid-Chatham Strait GKC")+ylab("Harvest (lb)") + 
@@ -212,7 +211,7 @@ mid <- ggplot(gkc3_midc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-# lower chatham strait ----------
+# lower chatham strait 
 gkc3_lowerc %>% filter(Year >= 1985 & Year <2017)->gkc3_lowerc1
 lower <- ggplot(gkc3_lowerc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("Lower Chatham Strait GKC")+ylab("Harvest (lb)") + 
@@ -220,7 +219,7 @@ lower <- ggplot(gkc3_lowerc1, aes(Year, biomass)) +geom_point(size =3) +geom_lin
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-# southern -------
+# southern 
 gkc3_south %>% filter(Year >= 1985 & Year <2017)->gkc3_south1
 south <- ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
   ggtitle("Southern GKC")+ylab("Harvest (lb)") + 
@@ -228,8 +227,12 @@ south <- ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
-png('./results/redcrab/Excursion/figure1.png', res= 300, width = 8, height =11, units = "in")
-grid.arrange(p1, p2, p3, p4, ncol = 1)
-dev.off()
+png('./results/figure1.png', res= 300, width = 8, height =8, units = "in")
 grid.arrange(east, north, icy, nsp, ncol = 2)
+dev.off()
+png('./results/figure2.png', res= 300, width = 8, height =8, units = "in")
 grid.arrange(mid, lower, south, ncol = 2)
+dev.off()
+
+## Figure CPUE vs pot lifts
+head(gkc3_east)
