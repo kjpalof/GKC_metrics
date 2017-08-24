@@ -258,26 +258,67 @@ gkc3 %>% filter(Year >= 2000 & Year <2017) %>% group_by(Area) %>%
 
 
 ### figures CPUE/ effort --------------
-gkc3_east1 %>% mutate(CPUE = biomass/ pots)-> gkc3_east1
-ggplot(gkc3_east1, aes(pots, CPUE)) +geom_point(size =3) +
-  ggtitle("East Central GKC")+ylab("CPUE (lb/pot lift)") + 
-  xlab("pot lifts")+ 
-  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+gkc3_east1 %>% mutate(CPUE = biomass/ pots, CPUE_no = number/pots)-> gkc3_east1
+east_cpue <- ggplot(gkc3_east1, aes(pots, CPUE)) +geom_point(size =3) +
+  #geom_point(aes(pots, CPUE_no), size = 3, color = "red")+
+  ggtitle("East Central GKC")+ylab("CPUE (lb/pot lift)") + xlab("pot lifts") + 
+  scale_y_continuous(breaks = seq(0,50, 10), limits = c(0,50))+
   theme(plot.title = element_text(hjust = 0.5))+
-  geom_smooth(method = 'lm', se = FALSE)
+  geom_smooth(colour = "black", method = 'lm', se = FALSE, linetype = 'dashed') 
+  #geom_smooth(aes(pots, CPUE_no), method = "lm", se = FALSE)
 
 gkc3_north1 %>% mutate(CPUE = biomass/ pots)-> gkc3_north1
-ggplot(gkc3_north1, aes(pots, CPUE)) +geom_point(size =3) +
+north_cpue <- ggplot(gkc3_north1, aes(pots, CPUE)) +geom_point(size =3) +
   ggtitle("Northern GKC")+ylab("CPUE (lb/pot lift)") + 
   xlab("pot lifts")+ 
-  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  scale_y_continuous(breaks = seq(0,50, 10), limits = c(0,50))+
   theme(plot.title = element_text(hjust = 0.5))+
-  geom_smooth(method = 'lm', se = FALSE)
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
 
 gkc3_icy1 %>% mutate(CPUE = biomass/ pots)-> gkc3_icy1
-ggplot(gkc3_icy1, aes(pots, CPUE)) +geom_point(size =3) +
+icy_cpue <- ggplot(gkc3_icy1, aes(pots, CPUE)) +geom_point(size =3) +
   ggtitle("Icy Strait GKC")+ylab("CPUE (lb/pot lift)") + 
   xlab("pot lifts")+ 
   scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
   theme(plot.title = element_text(hjust = 0.5))+
-  geom_smooth(method = 'lm', se = FALSE)
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
+
+gkc3_nsp1 %>% mutate(CPUE = biomass/ pots)-> gkc3_nsp1
+nsp_cpue <- ggplot(gkc3_nsp1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("North Stephens Passage GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
+
+gkc3_midc1 %>% mutate(CPUE = biomass/ pots)-> gkc3_midc1
+mid_cpue <- ggplot(gkc3_midc1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("Mid-Chatham Strait GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
+
+gkc3_lowerc1 %>% mutate(CPUE = biomass/ pots)-> gkc3_lowerc1
+lower_cpue <- ggplot(gkc3_lowerc1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("Lower Chatham Strait GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
+
+gkc3_south1 %>% mutate(CPUE = biomass/ pots)-> gkc3_south1
+south_cpue <- ggplot(gkc3_south1, aes(pots, CPUE)) +geom_point(size =3) +
+  ggtitle("Southern GKC")+ylab("CPUE (lb/pot lift)") + 
+  xlab("pot lifts")+ 
+  scale_y_continuous(labels = waiver(), breaks = seq(0,50, 10), limits = c(0,50))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_smooth(colour = "black", linetype = 'dashed', method = 'lm', se = FALSE)
+
+png('./results/figure3.png', res= 300, width = 8, height =8, units = "in")
+grid.arrange(east_cpue, north_cpue, icy_cpue, nsp_cpue, ncol = 2)
+dev.off()
+png('./results/figure4.png', res= 300, width = 8, height =8, units = "in")
+grid.arrange(mid_cpue, lower_cpue, south_cpue, ncol = 2)
+dev.off()
+
