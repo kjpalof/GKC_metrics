@@ -190,6 +190,11 @@ east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
 
+# save plot for BOF 
+png('./figures/east_central.png', res= 300, width = 7.5, height = 4.0, units = "in")
+east
+dev.off()
+
 ## Northern 
 gkc3_north %>% filter(Year >= 1985& Year <2017)->gkc3_north1
 north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
@@ -197,6 +202,11 @@ north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line
   geom_hline(yintercept = 138800, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+# save plot for BOF 
+png('./figures/northern.png', res= 300, width = 7.5, height = 4.0, units = "in")
+north
+dev.off()
 
 #icy strait -
 #only want 1985 on.
@@ -206,6 +216,11 @@ icy <- ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   geom_hline(yintercept = 53800, linetype = "dashed")+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+
+# save plot for BOF 
+png('./figures/icy.png', res= 300, width = 7.5, height = 4.0, units = "in")
+icy
+dev.off()
 
 #north stephens pass 
 #- only want 1985 on.-
