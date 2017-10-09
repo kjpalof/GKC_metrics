@@ -14,6 +14,7 @@ library(reshape2)
 library(extrafont)
 library(gridExtra)
 library(grid)
+library(scales)
 loadfonts(device="win")
 windowsFonts(Times=windowsFont("TT Times New Roman"))
 theme_set(theme_bw(base_size=12,base_family='Times New Roman')+
@@ -188,7 +189,8 @@ east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()
   ggtitle("East Central GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 211000, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))+
+  scale_y_continuous(labels = comma)
 
 # save plot for BOF 
 png('./figures/east_central.png', res= 300, width = 7.5, height = 4.0, units = "in")
@@ -201,8 +203,8 @@ north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line
   ggtitle("Northern GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 138800, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
-
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))+
+  scale_y_continuous(labels = comma, breaks= seq(0, 300000, 50000))
 # save plot for BOF 
 png('./figures/northern.png', res= 300, width = 7.5, height = 4.0, units = "in")
 north
