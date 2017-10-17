@@ -188,7 +188,7 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 ## East Central 
 gkc3_east %>% 
   filter(Year >= 1985 & Year <2017) %>% 
-  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
   mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
   mutate(biomass_conf = as.numeric(biomass_conf)) -> gkc3_east1
 east <- ggplot(gkc3_east1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
@@ -206,7 +206,7 @@ dev.off()
 ## Northern 
 gkc3_north %>% 
   filter(Year >= 1985 & Year <2017) %>% 
-  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
   mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
   mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_north1
 north <- ggplot(gkc3_north1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
@@ -224,14 +224,16 @@ dev.off()
 #only want 1985 on.
 gkc3_icy %>% 
   filter(Year >= 1985 & Year <2017) %>% 
-  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
   mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
   mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_icy1
 icy <- ggplot(gkc3_icy1, aes(Year, biomass_conf)) +geom_point(size=3) +geom_line()+
   ggtitle("Icy Strait GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 53800, linetype = "dashed")+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), 
+                     breaks = seq(1985, 2020, 5), limits = c(1985, 2020)) +
+  scale_y_continuous(labels = comma)
 
 # save plot for BOF 
 png('./figures/icy.png', res= 300, width = 7.5, height = 4.0, units = "in")
@@ -242,38 +244,58 @@ dev.off()
 #- only want 1985 on.-
 gkc3_nsp %>% 
   filter(Year >= 1985 & Year <2017) %>% 
-  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
   mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
   mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_nsp1
-nsp <- ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
+nsp <- ggplot(gkc3_nsp1, aes(Year, biomass_conf)) +geom_point(size=3) +geom_line()+
   ggtitle("North Stephens Passage GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 22800, linetype = "dashed")+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), 
+                     limits = c(1985, 2020)) +
+  scale_y_continuous(labels = comma)
 
 # mid-chatham strait 
-gkc3_midc %>% filter(Year >= 1985 & Year <2017)->gkc3_midc1
-mid <- ggplot(gkc3_midc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+gkc3_midc %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_midc1
+mid <- ggplot(gkc3_midc1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("Mid-Chatham Strait GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 90600, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), 
+                     limits = c(1985, 2020)) +
+  scale_y_continuous(labels = comma)
 
 # lower chatham strait 
-gkc3_lowerc %>% filter(Year >= 1985 & Year <2017)->gkc3_lowerc1
-lower <- ggplot(gkc3_lowerc1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+gkc3_lowerc %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_lowerc1
+lower <- ggplot(gkc3_lowerc1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("Lower Chatham Strait GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 21700, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), 
+                     limits = c(1985, 2020)) +
+  scale_y_continuous(labels = comma)
 
 # southern 
-gkc3_south %>% filter(Year >= 1985 & Year <2017)->gkc3_south1
-south <- ggplot(gkc3_south1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+gkc3_south %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits < 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_south1
+south <- ggplot(gkc3_south1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("Southern GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 22800, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))
+  scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), 
+                     limits = c(1985, 2020)) +
+  scale_y_continuous(labels = comma)
 
 png('./results/figure1.png', res= 300, width = 8, height =8, units = "in")
 grid.arrange(east, north, icy, nsp, ncol = 2)
