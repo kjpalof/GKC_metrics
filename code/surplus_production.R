@@ -204,8 +204,12 @@ east
 dev.off()
 
 ## Northern 
-gkc3_north %>% filter(Year >= 1985& Year <2017)->gkc3_north1
-north <- ggplot(gkc3_north1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+gkc3_north %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_north1
+north <- ggplot(gkc3_north1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("Northern GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 138800, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
@@ -218,8 +222,12 @@ dev.off()
 
 #icy strait -
 #only want 1985 on.
-gkc3_icy %>% filter(Year >= 1985 & Year <2017)->gkc3_icy1
-icy <- ggplot(gkc3_icy1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
+gkc3_icy %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_icy1
+icy <- ggplot(gkc3_icy1, aes(Year, biomass_conf)) +geom_point(size=3) +geom_line()+
   ggtitle("Icy Strait GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 53800, linetype = "dashed")+
   theme(plot.title = element_text(hjust = 0.5))+
@@ -232,7 +240,11 @@ dev.off()
 
 #north stephens pass 
 #- only want 1985 on.-
-gkc3_nsp %>% filter(Year >= 1985 & Year <2017)->gkc3_nsp1
+gkc3_nsp %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) ->gkc3_nsp1
 nsp <- ggplot(gkc3_nsp1, aes(Year, biomass)) +geom_point(size=3) +geom_line()+
   ggtitle("North Stephens Passage GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 22800, linetype = "dashed")+
