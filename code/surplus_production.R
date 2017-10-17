@@ -186,8 +186,8 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 ## East Central 
 gkc3_east %>% 
   filter(Year >= 1985 & Year <2017) %>% 
-  mutate(conf = ifelse(ft_permits <= 3, 0, 1)) %>% 
-  mutate(biomass_conf = ifelse(conf == 0, "", biomass)) %>% 
+  mutate(conf = ifelse(ft_permits <= 3, 1, 0)) %>% 
+  mutate(biomass_conf = ifelse(conf == 1, "", biomass)) %>% 
   mutate(biomass_conf = as.numeric(biomass_conf)) -> gkc3_east1
 east <- ggplot(gkc3_east1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("East Central GKC")+ylab("Harvest (lb)") + 
