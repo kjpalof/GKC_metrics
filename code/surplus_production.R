@@ -7,6 +7,8 @@
 # use data set Andrew compiled that's in excel currently - file name:
 # add recent data from fish tickets or log books???
 
+rm(list = ls()) # clear workspace 
+
 ## Load packages ---------------------------------------------------
 library(TropFishR) # this overwrites some of the tidyverse commands.  need to load it first? or later?
 library(tidyverse)
