@@ -184,8 +184,12 @@ prod_mod_ts(south_input1, method = "Schaefer", B0_init = NA, B0_est = NA, effort
 
 ### figures with MSY --------------
 ## East Central 
-gkc3_east %>% filter(Year >= 1985 & Year <2017)->gkc3_east1
-east <- ggplot(gkc3_east1, aes(Year, biomass)) +geom_point(size =3) +geom_line()+
+gkc3_east %>% 
+  filter(Year >= 1985 & Year <2017) %>% 
+  mutate(conf = ifelse(ft_permits <= 3, 0, 1)) %>% 
+  mutate(biomass_conf = ifelse(conf == 0, "", biomass)) %>% 
+  mutate(biomass_conf = as.numeric(biomass_conf)) -> gkc3_east1
+east <- ggplot(gkc3_east1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_line()+
   ggtitle("East Central GKC")+ylab("Harvest (lb)") + 
   geom_hline(yintercept = 211000, linetype = "dashed") +
   theme(plot.title = element_text(hjust = 0.5))+
@@ -270,9 +274,17 @@ head(gkc3_east)
 
 ### average harvest ------
 # exclude 2017 since season was not complete when this data was pulled
-gkc3 %>% filter(Year >= 2000 & Year <2017) %>% group_by(Area) %>% 
+gkc3 %>% 
+  filter(Year >= 2000 & Year <2017) %>% 
+  group_by(Area) %>% 
   summarise(avg_biomass = mean(biomass))
 
+### confidentiality issues -----------
+gkc3 %>% 
+  filter(Year >= 2000 & Year <2017) %>% 
+  group_by(Area, Year) %>% 
+  summarise(no_permits = sum(ft_permits)) %>% 
+  mutate(confidential = ifelse(no_permits <= 3, "**", "")) -> confidentiality
 
 ### figures CPUE/ effort --------------
 gkc3_east1 %>% mutate(CPUE = biomass/ pots, CPUE_no = number/pots)-> gkc3_east1
