@@ -199,7 +199,7 @@ east <- ggplot(gkc3_east1, aes(Year, biomass_conf)) +geom_point(size =3) +geom_l
   scale_y_continuous(labels = comma)
 
 # save plot for BOF 
-png('./figures/east_central.png', res= 300, width = 7.5, height = 4.0, units = "in")
+png('./figures/non_conf/east_central.png', res= 300, width = 7.5, height = 4.0, units = "in")
 east
 dev.off()
 
@@ -216,7 +216,7 @@ north <- ggplot(gkc3_north1, aes(Year, biomass_conf)) +geom_point(size =3) +geom
   scale_x_continuous(name = "Year", labels = waiver(), breaks = seq(1985, 2020, 5), limits = c(1985, 2020))+
   scale_y_continuous(labels = comma, breaks= seq(0, 300000, 50000))
 # save plot for BOF 
-png('./figures/northern.png', res= 300, width = 7.5, height = 4.0, units = "in")
+png('./figures/non_conf/northern.png', res= 300, width = 7.5, height = 4.0, units = "in")
 north
 dev.off()
 
@@ -236,7 +236,7 @@ icy <- ggplot(gkc3_icy1, aes(Year, biomass_conf)) +geom_point(size=3) +geom_line
   scale_y_continuous(labels = comma)
 
 # save plot for BOF 
-png('./figures/icy.png', res= 300, width = 7.5, height = 4.0, units = "in")
+png('./figures/non_conf/icy.png', res= 300, width = 7.5, height = 4.0, units = "in")
 icy
 dev.off()
 
