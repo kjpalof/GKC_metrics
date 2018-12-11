@@ -53,5 +53,12 @@ gkc1_year_avgs %>%
   ggplot(aes(x = Year, y = harvest)) +
   geom_point() +
   facet_wrap(~ Area) +
-  geom_hline(aes(yintercept = all.avg), color = "grey25") #+
+  geom_hline(aes(yintercept = all.avg), color = "grey25") +
+  geom_hline(aes(yintercept = y90s.avg), color = "black", linetype = "dashed")
  
+
+
+## OFL and ABC -----
+avgs %>% 
+  mutate(ABC.all = 0.8*all.avg, 
+         ABC.90s = 0.8*y90s.avg)
